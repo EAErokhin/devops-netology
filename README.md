@@ -92,17 +92,24 @@ Ansible выгодно отличается от других систем уп�
 ### Задача 3
 
 VirtualBox
-`7.0.4_Ubuntu155176`
+```bash
+7.0.4_Ubuntu155176
+```
 
 Vagrant
-`Vagrant 2.3.7`
+```bash
+Vagrant 2.3.7
+```
 
 Terraform
-`Terraform v1.5.3
-on Linux_amd64`
+```bash
+Terraform v1.5.3
+on Linux_amd64
+```
 
 Ansible
-`ansible [core 2.14.2]
+```bash
+ansible [core 2.14.2]
   config file = none
   configured module search path = ['/home/eugene/.ansible/plugins/modules', '/usr/share/ansible/plugins/modules']
   ansible python module location = /usr/lib/python3/dist-packages/ansible
@@ -110,4 +117,7 @@ Ansible
   executable location = /usr/bin/ansible
   python version = 3.11.2 (maun, May 30 2023, 17:45:26) [GCC 12.2.0] (/usr/bin/python3)
   jinja version = 3.1.2
-  libbyaml = True`
+  libbyaml = True
+  ```
+
+  ![Alt text](<Снимок экрана 2023-07-14 в 12.42.08.png>)
