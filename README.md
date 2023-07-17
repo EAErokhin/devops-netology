@@ -90,3 +90,15 @@ https://hub.docker.com/repository/docker/eaerokhin/nginx-netology/general
 
 Таким образом, Docker контейнеры гарантируют изоляцию, масштабируемость и гибкость при развертывании и управлении каждым из компонентов в данном сценар
 
+### Задача 3
+
+```bash
+vagrant@server1:~$ docker ps
+CONTAINER ID   IMAGE     COMMAND       CREATED         STATUS         PORTS     NAMES
+65dd096841fa   debian    "bash"        5 minutes ago   Up 5 minutes             strange_wescoff
+ef3690b1d9de   centos    "/bin/bash"   9 minutes ago   Up 9 minutes             cool_lederberg
+vagrant@server1:~$ docker exec -it 65dd096841fa sh -c "ls /data && cat /data/*"
+file1.txt  file2.txt
+test 1
+test 2
+```
