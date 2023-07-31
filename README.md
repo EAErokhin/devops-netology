@@ -1,27 +1,56 @@
-## Домашнее задание к занятию 4. «Оркестрация группой Docker-контейнеров на примере Docker Compose»
+## Домашнее задание к занятию «Введение в Terraform»
+
+
+```bash
+Terraform v1.5.4
+on darwin_arm64
+```
 
 ### Задача 1
 
-![Alt text](<Снимок экрана 2023-07-28 в 17.52.03.png>)
+Изучите файл .gitignore. В каком terraform-файле, согласно этому .gitignore, допустимо сохранить личную, секретную информацию?
 
-### Задача 2
+В соответствии с указанным .gitignore файлом, допустимо сохранять личную, секретную информацию в файле с именем "personal.auto.tfvars" в директории проекта. 
 
-![Alt text](<Снимок экрана 2023-07-28 в 17.37.02.png>)
+Выполните код проекта. Найдите в state-файле секретное содержимое созданного ресурса random_password, пришлите в качестве ответа конкретный ключ и его значение.
 
-### Задача 3
+jUk4RXRU30aRs3pj
+
+Раскомментируйте блок кода, примерно расположенный на строчках 29–42 файла main.tf. Выполните команду terraform validate. Объясните, в чём заключаются намеренно допущенные ошибки. Исправьте их.
+
+В коде были пропущенные переменные, некоторые переменные начинались с цифры, а так же были опечатки.
+
+Выполните код. В качестве ответа приложите вывод команды docker ps.
 
 ```bash
-[centos@netology ~]$ sudo docker ps
-CONTAINER ID   IMAGE                              COMMAND                  CREATED          STATUS                    PORTS                                                                              NAMES
-c09fafac964e   prom/prometheus:v2.17.1            "/bin/prometheus --c…"   12 minutes ago   Up 12 minutes             9090/tcp                                                                           prometheus
-c91845dfeed3   prom/node-exporter:v0.18.1         "/bin/node_exporter …"   12 minutes ago   Up 12 minutes             9100/tcp                                                                           nodeexporter
-1e1683464210   grafana/grafana:7.4.2              "/run.sh"                12 minutes ago   Up 12 minutes             3000/tcp                                                                           grafana
-f4d43c48afd1   stefanprodan/caddy                 "/sbin/tini -- caddy…"   12 minutes ago   Up 12 minutes             0.0.0.0:3000->3000/tcp, 0.0.0.0:9090-9091->9090-9091/tcp, 0.0.0.0:9093->9093/tcp   caddy
-c719e16e07de   gcr.io/cadvisor/cadvisor:v0.47.0   "/usr/bin/cadvisor -…"   12 minutes ago   Up 12 minutes (healthy)   8080/tcp                                                                           cadvisor
-c7bcbaacfc2a   prom/pushgateway:v1.2.0            "/bin/pushgateway"       12 minutes ago   Up 12 minutes             9091/tcp                                                                           pushgateway
-678886d14c5c   prom/alertmanager:v0.20.0          "/bin/alertmanager -…"   12 minutes ago   Up 12 minutes             9093/tcp                                                                           alertmanager
+CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS          PORTS                  NAMES
+236dcd6a4d70   ff78c7a65ec2   "/docker-entrypoint.…"   18 seconds ago   Up 16 seconds   0.0.0.0:8000->80/tcp   example_jUk4RXRU30aRs3pj
 ```
-![Alt text](<Снимок экрана 2023-07-28 в 17.48.10.png>)
-### Задача 4
 
-![Alt text](<Снимок экрана 2023-07-28 в 17.50.15.png>)
+Замените имя docker-контейнера в блоке кода на hello_world. Не перепутайте имя контейнера и имя образа. Мы всё ещё продолжаем использовать name = "nginx:latest". Выполните команду terraform apply -auto-approve. Объясните своими словами, в чём может быть опасность применения ключа  -auto-approve. В качестве ответа дополнительно приложите вывод команды docker ps.
+
+Опасность применения ключа -auto-approve заключается в том, что вы не будете иметь возможности внимательно проверить изменения перед их применением. Если есть какие-либо ошибки или проблемы с вашими настройками, они могут привести к нежелательным результатам или даже потере данных.
+
+```bash
+CONTAINER ID   IMAGE          COMMAND                  CREATED          STATUS          PORTS                  NAMES
+09a1a20ef603   ff78c7a65ec2   "/docker-entrypoint.…"   15 seconds ago   Up 15 seconds   0.0.0.0:8000->80/tcp   hello_world.
+```
+
+Уничтожьте созданные ресурсы с помощью terraform. Убедитесь, что все ресурсы удалены. Приложите содержимое файла terraform.tfstate.
+
+
+```json
+{
+  "version": 4,
+  "terraform_version": "1.5.4",
+  "serial": 11,
+  "lineage": "955923ec-c280-0513-4006-2e01b7769cf2",
+  "outputs": {},
+  "resources": [],
+  "check_results": null
+}
+```
+
+Объясните, почему при этом не был удалён docker-образ nginx:latest. Ответ подкрепите выдержкой из документации провайдера docker.
+
+По умолчанию команда terraform destroy не удаляет docker-образы, только контейнеры и сети. В документации провайдера Docker сказано следующее: "Note that terraform destroy does not attempt to destroy or de-register the Docker Image. Doing so could result in accidentally deleting an image that is still being used by other workloads. Deleting an Image is outside the scope of the Terraform Docker provider, and is typically handled directly with custom scripts or with other container management tools."
