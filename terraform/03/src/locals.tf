@@ -1,0 +1,1 @@
+locals {ssh-keys = file("~/.ssh/mytestkey.pub")}
