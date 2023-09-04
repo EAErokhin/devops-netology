@@ -8,3 +8,10 @@ resource "yandex_vpc_subnet" "develop" {
   v4_cidr_blocks = var.default_cidr
 }
 
+
+#Пример передачи cloud-config в ВМ для демонстрации №3
+data "template_file" "cloudinit" {
+ template = file("./cloud-init.yml")
+}
+
+  

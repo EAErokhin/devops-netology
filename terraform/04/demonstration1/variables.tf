@@ -33,5 +33,7 @@ variable "vpc_name" {
 
 variable "public_key" {
   type    = string
-  default = ""
+  default = "~/.ssh/mytestkey.pub""
 }
+
+

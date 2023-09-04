@@ -1,0 +1,19 @@
+---
+  el:
+    hosts:
+      centos7:
+        ansible_host: 84.201.131.210
+        ansible_user: builder
+        ansible_ssh_private_key_file: /Users/e.a.erokhin/.ssh/mykey
+  deb:
+    hosts:
+      ubuntu:
+        ansible_host: 158.160.46.141
+        ansible_user: builder
+        ansible_ssh_private_key_file: /Users/e.a.erokhin/.ssh/mykey
+  local:
+    hosts:
+      localhost:
+        ansible_connection: local
+
+  
