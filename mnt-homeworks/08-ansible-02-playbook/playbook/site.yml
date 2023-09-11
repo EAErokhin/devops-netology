@@ -7,18 +7,29 @@
       ansible.builtin.service:
         name: clickhouse-server
         state: restarted
+
+    - name: Restart Vector
+      ansible.builtin.systemd:
+        name: vector
+        state: restarted
+
   tasks:
-    - block:
-        - name: Get clickhouse distrib
+    - name: Block install clickhouse
+      block:
+        - name: Get clickhouse distrib 1
           ansible.builtin.get_url:
             url: "https://packages.clickhouse.com/rpm/stable/{{ item }}-{{ clickhouse_version }}.noarch.rpm"
             dest: "./{{ item }}-{{ clickhouse_version }}.rpm"
+            mode: "0777"
           with_items: "{{ clickhouse_packages }}"
       rescue:
-        - name: Get clickhouse distrib
+
+        - name: Get clickhouse distrib 2
           ansible.builtin.get_url:
             url: "https://packages.clickhouse.com/rpm/stable/clickhouse-common-static-{{ clickhouse_version }}.x86_64.rpm"
             dest: "./clickhouse-common-static-{{ clickhouse_version }}.rpm"
+            mode: "0777"
+
     - name: Install clickhouse packages
       become: true
       ansible.builtin.yum:
@@ -28,9 +39,29 @@
           - clickhouse-server-{{ clickhouse_version }}.rpm
       notify: Start clickhouse service
     - name: Flush handlers
-      meta: flush_handlers
+      ansible.builtin.meta: flush_handlers
     - name: Create database
       ansible.builtin.command: "clickhouse-client -q 'create database logs;'"
       register: create_db
-      failed_when: create_db.rc != 0 and create_db.rc !=82
+      failed_when: create_db.rc != 0 and create_db.rc != 82
       changed_when: create_db.rc == 0
+
+    - name: Download Vector
+      ansible.builtin.get_url:
+        url: https://packages.timber.io/vector/0.32.1/vector-0.32.1-1.x86_64.rpm
+        dest: "./vector-0.32.1-1.x86_64.rpm"
+        mode: "0777"
+
+    - name: Install vector
+      become: true
+      ansible.builtin.yum:
+        name:
+          - vector-0.32.1-1.x86_64.rpm
+
+    - name: Create Vector Configuration
+      ansible.builtin.template:
+        src: /Users/e.a.erokhin/Documents/GitHub/devops-netology/mnt-homeworks/08-ansible-02-playbook/playbook/files/vector_config.j2
+        dest: /etc/vector/vector.toml
+        mode: "0777"
+      become: true
+      notify: Restart Vector
