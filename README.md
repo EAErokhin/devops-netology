@@ -33,7 +33,8 @@ CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES09a1a20ef603 ff78c7a65ec2 "
 { "version": 4, "terraform_version": "1.5.4", "serial": 11, "lineage": "955923ec-c280-0513-4006-2e01b7769cf2", "outputs": {}, "resources": [], "check_results": null}
 ```
 Объясните, почему при этом не был удалён docker-образ nginx:latest. Ответ подкрепите выдержкой из документации провайдера docker.
+```
+force_remove (Boolean) If true, then the image is removed forcibly when the resource is destroyed.
 
-Параметр `force_delete_image` запрещает Terraform удалить образ docker. Это значит, что при выполнении операции удаления ресурсов, Terraform не удалит образ, даже если он больше не используется. В документации провайдера Docker указано следующее:
-"When deleting a container (using docker_container.resource.destroy or similar), by default the container with all its resources will be deleted. However, any images created from failed builds (such as with force_pull) will be retained. To remove these images, the cleanup option for the Docker daemon must be set, via the daemon configuration file (e.g., /etc/docker/daemon.json) or the command line option.
-By default, this option is disabled. Terraform Docker provider does not implement image cleanup if the Docker daemon cleanup option is disabled/missing."
+keep_locally (Boolean) If true, then the Docker image won't be deleted on destroy operation. If this is false, it will delete the image from the docker local storage on destroy operation.
+```
